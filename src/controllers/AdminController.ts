@@ -28,6 +28,11 @@ class AdminController {
      * @param {Response} res
      */
     public updateAdmin(req: Request, res: Response) {
+        // @ts-ignore
+        if (!req.session.loggedin) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+        
         const { id, links, ...otherFields } = req.body;
         const processedLinks = (links || []).map((link: any, index: number) => ({
             ...link,

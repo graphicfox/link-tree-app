@@ -1,176 +1,190 @@
 <style>
-    .opacity-0 {
-        opacity: 0;
-    }
-    .opacity-100 {
-        opacity: 1;
-    }
+	.opacity-0 {
+		opacity: 0;
+	}
+
+	.opacity-100 {
+		opacity: 1;
+	}
 </style>
 
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
 <script>
-    const form = document.getElementById('edit-form');
-    const preview = document.getElementById('preview');
-    const linksContainer = document.getElementById('links-container');
-    const addLinkBtn = document.getElementById('add-link');
-    const submitBtn = document.getElementById('submit-btn');
-    const toggleButton = document.getElementById('toggle-edit-form');
+    document.addEventListener('DOMContentLoaded', () => {
+        const form = document.getElementById('edit-form');
+        const preview = document.getElementById('preview');
+        const linksContainer = document.getElementById('links-container');
+        const addLinkBtn = document.getElementById('add-link');
+        const submitBtn = document.getElementById('submit-btn');
+        const toggleButton = document.getElementById('toggle-edit-form');
+        const deleteLinks = document.querySelectorAll('.delete-link');
 
-    // DEBOUNCE
-    function debounce(func, wait) {
-        let timeout;
+        // DEBOUNCE
+        function debounce(func, wait)
+        {
+            let timeout;
 
-        return function executedFunction(...args) {
-            const later = () => {
-                clearTimeout(timeout);
-                func(...args);
-            };
-
-            clearTimeout(timeout);
-            timeout = setTimeout(later, wait);
-        };
-    };
-
-    // Update live preview on form input
-    async function updateLivePreview() {
-        preview.classList.add('opacity-0');
-
-        setTimeout(async () => {
-            const formData = new FormData(form);
-            const data = Object.fromEntries(formData.entries());
-
-            // Manually handle links since FormData doesn't group them nicely
-            const links = [];
-            const linkElements = linksContainer.querySelectorAll('.link-item');
-            linkElements.forEach(linkElement => {
-                const link = {
-                    id: linkElement.dataset.linkId,
-                    name: linkElement.querySelector('input[name*="[name]"]').value,
-                    icon: linkElement.querySelector('select[name*="[icon]"]').value,
-                    link: linkElement.querySelector('input[name*="[link]"]').value
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
                 };
-                links.push(link);
-            });
 
-            const payload = {
-                name: data.name,
-                profileImage: data.profileImage,
-                description: data.description,
-                color: data.color,
-                highlightColor: data.highlightColor,
-                backgroundColor: data.backgroundColor,
-                links: links
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
             };
+        }
 
-            try {
-                const response = await fetch('/preview', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(payload),
+        // Update live preview on form input
+        async function updateLivePreview()
+        {
+            preview.classList.add('opacity-0');
+
+            setTimeout(async () => {
+                const formData = new FormData(form);
+                const data = Object.fromEntries(formData.entries());
+
+                // Manually handle links since FormData doesn't group them nicely
+                const links = [];
+                const linkElements = linksContainer.querySelectorAll('.link-item');
+                linkElements.forEach(linkElement => {
+                    const link = {
+                        id: linkElement.dataset.linkId,
+                        name: linkElement.querySelector('input[name*="[name]"]').value,
+                        icon: linkElement.querySelector('select[name*="[icon]"]').value,
+                        link: linkElement.querySelector('input[name*="[link]"]').value
+                    };
+                    links.push(link);
                 });
 
-                if (response.ok) {
-                    preview.innerHTML = await response.text();
-                } else {
-                    console.error('Preview update failed:', response.statusText);
+                const payload = {
+                    name: data.name,
+                    profileImage: data.profileImage,
+                    description: data.description,
+                    color: data.color,
+                    highlightColor: data.highlightColor,
+                    backgroundColor: data.backgroundColor,
+                    links: links
+                };
+
+                try {
+                    const response = await fetch('/preview', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (response.ok) {
+                        preview.innerHTML = await response.text();
+                    } else {
+                        console.error('Preview update failed:', response.statusText);
+                        preview.innerHTML = `<p class="text-red-500 p-4">Error loading preview.</p>`;
+                    }
+                } catch (error) {
+                    console.error('Error fetching preview:', error);
                     preview.innerHTML = `<p class="text-red-500 p-4">Error loading preview.</p>`;
+                } finally {
+                    preview.classList.remove('opacity-0');
                 }
-            } catch (error) {
-                console.error('Error fetching preview:', error);
-                preview.innerHTML = `<p class="text-red-500 p-4">Error loading preview.</p>`;
-            } finally {
-                preview.classList.remove('opacity-0');
-            }
-        }, 300);
-    };
+            }, 300);
+        }
 
-    const debouncedUpdate = debounce(updateLivePreview, 250);
+        const debouncedUpdate = debounce(updateLivePreview, 250);
 
-    function reindexLinks() {
-        const linkElements = linksContainer.querySelectorAll('.link-item');
-        linkElements.forEach((div, index) => {
-            div.querySelectorAll('input, select').forEach(input => {
-                const name = input.getAttribute('name');
-                if (name) {
-                    const newName = name.replace(/links\[\d+\]/, `links[${index}]`);
-                    input.setAttribute('name', newName);
-                }
-            });
-        });
-    };
-
-    function setupSortable() {
-        if (linksContainer) {
-            Sortable.create(linksContainer, {
-                animation: 150,
-                handle: '.drag-handle',
-                onEnd: () => {
-                    reindexLinks();
-                    debouncedUpdate();
-                }
+        function reindexLinks()
+        {
+            const linkElements = linksContainer.querySelectorAll('.link-item');
+            linkElements.forEach((div, index) => {
+                div.querySelectorAll('input, select').forEach(input => {
+                    const name = input.getAttribute('name');
+                    if (name) {
+                        const newName = name.replace(/links\[\d+\]/, `links[${index}]`);
+                        input.setAttribute('name', newName);
+                    }
+                });
             });
         }
-    };
 
-    function removeLink(btn) {
-        btn.closest('.link-item').remove();
-        reindexLinks();
-        debouncedUpdate();
-    };
+        function setupSortable()
+        {
+            if (linksContainer) {
+                Sortable.create(linksContainer, {
+                    animation: 150,
+                    handle: '.drag-handle',
+                    onEnd: () => {
+                        reindexLinks();
+                        debouncedUpdate();
+                    }
+                });
+            }
+        }
 
-    function addLink()  {
-        const index = linksContainer.children.length;
-        const linkItem = document.createElement('div');
-        linkItem.classList.add('link-item', 'p-3', 'border', 'rounded-lg', 'mb-2', 'flex', 'items-center', 'gap-2', 'bg-gray-50');
-        linkItem.innerHTML = `
-            <span class="drag-handle cursor-move text-gray-400 hover:text-gray-600">
-                <i class="fas fa-grip-vertical"></i>
-            </span>
-            <div class="flex-grow">
-                <div class="flex gap-2">
-                    <input type="text" name="links[${index}][name]" placeholder="Link Title" class="p-2 border rounded-md w-full" oninput="debouncedUpdate()">
-                    <select name="links[${index}][icon]" class="p-2 border rounded-md" onchange="debouncedUpdate()">
-                        <option value="">No Icon</option>
-                        <option value="fab fa-github">GitHub</option>
-                        <option value="fab fa-twitter">Twitter</option>
-                        <option value="fab fa-linkedin">LinkedIn</option>
-                        <option value="fab fa-instagram">Instagram</option>
-                        <option value="fas fa-globe">Website</option>
-                    </select>
-                </div>
-                <div class="mt-2">
-                    <input type="url" name="links[${index}][link]" placeholder="https://example.com" class="p-2 border rounded-md w-full" oninput="debouncedUpdate()">
-                </div>
-            </div>
-            <button type="button" class="text-red-500 hover:text-red-700" onclick="removeLink(this)">
-                <i class="fas fa-trash"></i>
-            </button>
-        `;
-        linksContainer.appendChild(linkItem);
-        reindexLinks();
-    };
+        function removeLink(btn)
+        {
+            btn.closest('.link-item').remove();
+            reindexLinks();
+            debouncedUpdate();
+        }
 
-    function toggleMobileForm() {
-        const isVisible = form.classList.contains('!top-1/2');
+        function addLink()
+        {
+            const template = `<%- include('EditLinkItem', { link: {id: `new-temp-id`,name: '',icon: 'x-twitter',link: '' }}) -%>`
 
-        if (!isVisible) {
-            form.classList.add('!top-1/2');
-            toggleButton.textContent = 'Hide';
-            toggleButton.classList.add('!bottom-1/2');
-            return
-        } 
+            const linkItem = document.createElement('div');
+            linkItem.innerHTML = template;
+            linksContainer.appendChild(linkItem.firstElementChild);
 
-        form.classList.remove('!top-1/2');
-        toggleButton.textContent = 'Edit';
-        toggleButton.classList.remove('!bottom-1/2');
-    }
+            reindexLinks();
+        }
 
+        function toggleMobileForm()
+        {
+            const isVisible = form.classList.contains('!top-1/2');
 
-    document.addEventListener('DOMContentLoaded', () => {
+            if (!isVisible) {
+                form.classList.add('!top-1/2');
+                toggleButton.textContent = 'Hide';
+                toggleButton.classList.add('!bottom-1/2');
+                return;
+            }
+
+            form.classList.remove('!top-1/2');
+            toggleButton.textContent = 'Edit';
+            toggleButton.classList.remove('!bottom-1/2');
+        }
+
+        function convertFormDataToJson(formData)
+        {
+            const jsonData = {};
+
+            formData.forEach(([key, value]) => {
+                const match = key.match(/(\w+)\[(\d+)\]\[(\w+)\]/);
+                if (match) {
+                    const arrayName = match[1];
+                    const index = parseInt(match[2], 10);
+                    const propertyName = match[3];
+
+                    if (!jsonData[arrayName]) {
+                        jsonData[arrayName] = [];
+                    }
+                    if (!jsonData[arrayName][index]) {
+                        jsonData[arrayName][index] = {};
+                    }
+                    jsonData[arrayName][index][propertyName] = value;
+                } else {
+                    jsonData[key] = value;
+                }
+            });
+
+            return JSON.stringify(jsonData);
+        }
+
         addLinkBtn.addEventListener('click', addLink);
+        deleteLinks.forEach(btn => btn.addEventListener('click', () => removeLink(btn)));
         toggleButton.addEventListener('click', toggleMobileForm);
+        form.addEventListener('input', debouncedUpdate);
 
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -180,7 +194,10 @@
             const formData = new FormData(form);
             const response = await fetch(form.action, {
                 method: 'POST',
-                body: new URLSearchParams(formData)
+                body: convertFormDataToJson(formData.entries().toArray()),
+                headers: {
+                    "Content-Type": "application/json"
+                }
             });
 
             if (response.ok) {
@@ -188,7 +205,7 @@
             } else {
                 console.error('Form submission failed');
                 const errorDiv = document.getElementById('form-error');
-                if(!errorDiv) {
+                if (!errorDiv) {
                     const newErrorDiv = document.createElement('div');
                     newErrorDiv.id = 'form-error';
                     newErrorDiv.className = 'bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative';

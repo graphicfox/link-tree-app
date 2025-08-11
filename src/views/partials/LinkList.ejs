@@ -1,5 +1,5 @@
 <ul id="links" class="w-full flex flex-col gap-1">
-    <% links.forEach(function(link){ %>
+    <% links.forEach((link) => { %>
         <%- include('LinkItem', {link: link}); %>
     <% }); %>
 </ul>
