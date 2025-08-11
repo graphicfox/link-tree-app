@@ -10,12 +10,21 @@ WORKDIR /app
 COPY package*.json .
 RUN npm install
 COPY . .
+
 RUN npm run build
+
+COPY src/views views/
+COPY src/public public/
+COPY src/data data/
+
+#if no data/default.json is present, we create one from the template
+RUN test ! -f dist/data/default.json && cp src/data/template_default.json dist/data/default.json || true
 
 FROM ${DOCKER_BASE_IMAGE}:${DOCKER_BASE_TAG}
 WORKDIR /app
 COPY --from=builder /app/dist dist/
 COPY --from=builder /app/node_modules node_modules/
+
 COPY package.json .
 EXPOSE 3000
 ENV NODE_ENV=production

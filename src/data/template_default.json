@@ -1,0 +1,17 @@
+{
+    "id": "default",
+    "name": "Your Name",
+    "profileImage": "https://cataas.com/cat",
+    "description": "Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum",
+    "color": "#ffffff",
+    "highlightColor": "#bcee9b",
+    "backgroundColor": "#000000",
+    "links": [
+        {
+            "name": "Youtube",
+            "icon": "youtube",
+            "link": "https://www.youtube.com/",
+            "id": 0
+        }
+    ]
+}

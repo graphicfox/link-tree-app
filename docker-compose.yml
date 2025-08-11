@@ -5,7 +5,7 @@ services:
     image: '${DOCKER_BASE_IMAGE}:${DOCKER_BASE_TAG}'
     container_name: '${COMPOSE_PROJECT_NAME}'
     working_dir: /home/node/app/
-    command: sh -c "npm install && npm run dev"
+    command: sh -c "test ! -f src/data/default.json && cp src/data/template_default.json src/data/default.json || true && npm install && npm run dev"
     environment:
       - 'VIRTUAL_HOST=${APP_DOMAIN}'
       - VIRTUAL_PORT=3000

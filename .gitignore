@@ -11,6 +11,7 @@ perms*.set
 dist
 /src/public/css/app.css
 /node_modules
+/src/data/default.json
 
 # IDEA Code Style
 app/.idea/codeStyles
