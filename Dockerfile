@@ -20,12 +20,8 @@ FROM ${DOCKER_BASE_IMAGE}:${DOCKER_BASE_TAG}
 WORKDIR /app
 COPY --from=builder /app/start.sh start.sh
 COPY --from=builder /app/dist dist/
-COPY --from=builder /app/src/data/template_default.json dist/data/template_default.json
+COPY --from=builder /app/src/data/template_default.json template_default.json
 COPY --from=builder /app/node_modules node_modules/
-
-#if no data/default.json is present, we create one from the template
-RUN test ! -f dist/data/default.json &&  \
-    cp dist/data/template_default.json dist/data/default.json || true
 
 COPY package.json .
 EXPOSE 3000
