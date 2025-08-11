@@ -1,0 +1,35 @@
+{
+  "name": "@kim-martini/express-linktree-app",
+  "author": "Kim Martini",
+  "version": "1.0.0",
+  "description": "Simple express linktree app with typescript and admin login",
+  "main": "src/App.ts",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "dev:tailwind": "postcss src/public/css/tailwind.css -o src/public/css/app.css -w",
+    "dev:express": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/server.ts",
+    "dev": "concurrently 'npm run dev:express' 'npm run dev:tailwind'",
+    "lint": "eslint 'src/**/*.ts'"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "4.1.11",
+    "@types/express": "5.0.3",
+    "@types/express-session": "1.18.2",
+    "@types/node": "22.17.1",
+    "concurrently": "^9.2.0",
+    "dotenv": "17.2.1",
+    "ejs": "3.1.10",
+    "eslint": "9.33.0",
+    "express": "5.1.0",
+    "express-session": "1.18.2",
+    "install": "0.13.0",
+    "nodemon": "3.1.10",
+    "postcss": "^8.5.6",
+    "postcss-cli": "^11.0.1",
+    "tailwindcss": "4.1.11",
+    "ts-node": "10.9.2",
+    "typescript": "5.9.2"
+  },
+  "license": "Apache-2.0"
+}

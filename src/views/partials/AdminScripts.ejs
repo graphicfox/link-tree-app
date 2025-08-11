@@ -1,0 +1,209 @@
+<style>
+    .opacity-0 {
+        opacity: 0;
+    }
+    .opacity-100 {
+        opacity: 1;
+    }
+</style>
+
+<script>
+    const form = document.getElementById('edit-form');
+    const preview = document.getElementById('preview');
+    const linksContainer = document.getElementById('links-container');
+    const addLinkBtn = document.getElementById('add-link');
+    const submitBtn = document.getElementById('submit-btn');
+
+    // DEBOUNCE
+    const debounce = (func, wait) => {
+        let timeout;
+
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    };
+
+    // Update live preview on form input
+    const updateLivePreview = async () => {
+        preview.classList.add('opacity-0');
+
+        setTimeout(async () => {
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+
+            // Manually handle links since FormData doesn't group them nicely
+            const links = [];
+            const linkElements = linksContainer.querySelectorAll('.link-item');
+            linkElements.forEach(linkElement => {
+                const link = {
+                    name: linkElement.querySelector('input[name*="[name]"]').value,
+                    icon: linkElement.querySelector('select[name*="[icon]"]').value,
+                    link: linkElement.querySelector('input[name*="[link]"]').value
+                };
+                links.push(link);
+            });
+
+            const payload = {
+                name: data.name,
+                profileImage: data.profileImage,
+                description: data.description,
+                color: data.color,
+                highlightColor: data.highlightColor,
+                backgroundColor: data.backgroundColor,
+                links: links
+            };
+
+            try {
+                const response = await fetch('/preview', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(payload),
+                });
+
+                if (response.ok) {
+                    preview.innerHTML = await response.text();
+                } else {
+                    console.error('Preview update failed:', response.statusText);
+                    preview.innerHTML = `<p class="text-red-500 p-4">Error loading preview.</p>`;
+                }
+            } catch (error) {
+                console.error('Error fetching preview:', error);
+                preview.innerHTML = `<p class="text-red-500 p-4">Error loading preview.</p>`;
+            } finally {
+                preview.classList.remove('opacity-0');
+            }
+        }, 300);
+    };
+
+    const debouncedUpdate = debounce(updateLivePreview, 250);
+
+    const reindexLinks = () => {
+        const linkElements = linksContainer.querySelectorAll('.link-item');
+        linkElements.forEach((div, index) => {
+            div.querySelectorAll('input, select').forEach(input => {
+                const name = input.getAttribute('name');
+                if (name) {
+                    const newName = name.replace(/links\[\d+\]/, `links[${index}]`);
+                    input.setAttribute('name', newName);
+                }
+            });
+        });
+    };
+
+    // Add a new link to the list of links
+    addLinkBtn.addEventListener('click', () => {
+        const index = linksContainer.children.length;
+        const newLink = document.createElement('div');
+        newLink.className = 'p-4 border rounded-lg shadow-sm bg-gray-50 link-item';
+        newLink.innerHTML = `
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="md:col-span-1">
+                    <label class="block text-sm font-medium text-gray-700">Link Name</label>
+                    <input type="text" name="links[${index}][name]" value="" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2">
+                </div>
+                <div class="md:col-span-1">
+                    <label class="block text-sm font-medium text-gray-700">Icon</label>
+                    <select name="links[${index}][icon]" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2">
+                        <option value="twitter">Twitter</option>
+                        <option value="github">GitHub</option>
+                        <option value="instagram">Instagram</option>
+                        <option value="facebook">Facebook</option>
+                        <option value="linkedin">LinkedIn</option>
+                        <option value="youtube">YouTube</option>
+                    </select>
+                </div>
+                <div class="md:col-span-1">
+                    <label class="block text-sm font-medium text-gray-700">URL</label>
+                    <input type="text" name="links[${index}][link]" value="" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2">
+                </div>
+            </div>
+            <button type="button" class="mt-4 text-red-500 hover:text-red-700 text-sm delete-link">Delete</button>
+        `;
+        // Add event listeners to new inputs
+        newLink.querySelectorAll('input, select').forEach(input => input.addEventListener('input', updateLivePreview));
+        linksContainer.appendChild(newLink);
+        updateLivePreview(); // A reindex isn't strictly needed for preview but good practice for form state
+    });
+
+    // Delete a link from the list of links
+    linksContainer.addEventListener('click', (e) => {
+        if (e.target.classList.contains('delete-link')) {
+            e.target.closest('.link-item').remove();
+            reindexLinks();
+            updateLivePreview();
+        }
+    });
+
+    // Catch form submission, handle post and update the preview
+    form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        const formData = new FormData(form);
+        const data = Object.fromEntries(formData.entries());
+        submitBtn.innerHTML = 'Saving...';
+        submitBtn.disabled = true;
+
+        const links = [];
+        const linkElements = linksContainer.querySelectorAll('.link-item');
+        linkElements.forEach(linkElement => {
+            const nameInput = linkElement.querySelector('input[name*="[name]"]');
+            const iconInput = linkElement.querySelector('select[name*="[icon]"]');
+            const linkInput = linkElement.querySelector('input[name*="[link]"]');
+
+            if (nameInput && iconInput && linkInput) {
+                const link = {
+                    name: nameInput.value,
+                    icon: iconInput.value,
+                    link: linkInput.value
+                };
+                links.push(link);
+            }
+        });
+
+        const payload = {
+            id: data.id,
+            name: data.name,
+            profileImage: data.profileImage,
+            description: data.description,
+            color: data.color,
+            highlightColor: data.highlightColor,
+            backgroundColor: data.backgroundColor,
+            links: links
+        };
+
+        try {
+            const response = await fetch('/admin', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(payload),
+            });
+
+            submitBtn.innerHTML = 'Save Changes';
+            submitBtn.disabled = false;
+
+            if (response.ok) {
+                window.location.href = '/admin';
+            } else {
+                console.error('Failed to save changes:', response.statusText);
+                submitBtn.innerHTML = 'Failed to save changes';
+            }
+        } catch (error) {
+            console.error('Error submitting form:', error);
+        }
+    });
+
+    form.addEventListener('input', debouncedUpdate);
+
+    // Init preview on page load
+    updateLivePreview();
+</script>

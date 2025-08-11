@@ -1,0 +1,12 @@
+.idea/
+.settings/
+.DS_Store
+.env
+.env.app
+.unison*
+perms*.set
+.phpstorm*
+
+.history
+/src/public/css/app.css
+/node_modules

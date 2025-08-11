@@ -1,0 +1,34 @@
+<div class="flex justify-between items-center">
+    <h2 class="text-2xl font-bold mt-8 mb-4 border-t pt-6 text-gray-800">Links</h2>
+    <button type="button" id="add-link" class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+        Add Link
+    </button>
+</div>
+<div id="links-container" class="space-y-4">
+    <% data.links.forEach((link, index) => { %>
+        <div class="p-4 border rounded-lg shadow-sm bg-gray-50 link-item" data-link-id="<%= link.id %>">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="md:col-span-1">
+                    <label class="block text-sm font-medium text-gray-700">Link Name</label>
+                    <input type="text" name="links[<%= index %>][name]" value="<%= link.name %>" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2">
+                </div>
+                <div class="md:col-span-1">
+                    <label class="block text-sm font-medium text-gray-700">Icon</label>
+                    <select name="links[<%= index %>][icon]" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2">
+                        <option value="x-twitter" <%= link.icon === 'x-twitter' ? 'selected' : '' %>>Twitter</option>
+                        <option value="github" <%= link.icon === 'github' ? 'selected' : '' %>>GitHub</option>
+                        <option value="instagram" <%= link.icon === 'instagram' ? 'selected' : '' %>>Instagram</option>
+                        <option value="facebook" <%= link.icon === 'facebook' ? 'selected' : '' %>>Facebook</option>
+                        <option value="linkedin" <%= link.icon === 'linkedin' ? 'selected' : '' %>>LinkedIn</option>
+                        <option value="youtube" <%= link.icon === 'youtube' ? 'selected' : '' %>>YouTube</option>
+                    </select>
+                </div>
+                <div class="md:col-span-1">
+                    <label class="block text-sm font-medium text-gray-700">URL</label>
+                    <input type="text" name="links[<%= index %>][link]" value="<%= link.link %>" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-2">
+                </div>
+            </div>
+            <button type="button" class="mt-4 text-red-500 hover:text-red-700 text-sm delete-link">Delete</button>
+        </div>
+    <% }); %>
+</div>

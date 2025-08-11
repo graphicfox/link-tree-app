@@ -1,0 +1,20 @@
+.settings/
+.DS_Store
+.env
+.env.app
+.unison*
+vendor
+perms*.set
+
+.history
+/src/public/css/app.css
+/node_modules
+
+# IDEA Code Style
+app/.idea/codeStyles
+!.idea/copyright
+!.idea/codeStyles
+!.idea/inspectionProfiles
+!.idea/php-inspections-ea-ultimate.xml
+!.idea/saveactions_settings.xml
+!.idea/dataSources*.xml
