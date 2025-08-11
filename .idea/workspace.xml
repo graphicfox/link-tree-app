@@ -4,13 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="53bbe3ae-7c4f-4a09-8951-86fa6038c623" name="Changes" comment="chore: Add IntelliJ GitToolBox project settings configuration">
-      <change beforePath="$PROJECT_DIR$/.env.app.template" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+    <list default="true" id="53bbe3ae-7c4f-4a09-8951-86fa6038c623" name="Changes" comment="feat: Add drag-and-drop functionality for link management using SortableJS, enhance `.env` handling, and update `.gitignore` to include `.env.app.template`">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/partials/AdminScripts.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/partials/AdminScripts.ejs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/partials/EditLinks.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/partials/EditLinks.ejs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -99,7 +96,7 @@
       <workItem from="1754811123662" duration="6254000" />
       <workItem from="1754822831175" duration="4019000" />
       <workItem from="1754828039023" duration="74000" />
-      <workItem from="1754828153214" duration="20624000" />
+      <workItem from="1754828153214" duration="20902000" />
     </task>
     <task id="LOCAL-00001" summary="feat: Integrate admin editing functionality with live preview, add link management, and streamline application setup with Docker and configuration files.">
       <option name="closed" value="true" />
@@ -117,7 +114,15 @@
       <option name="project" value="LOCAL" />
       <updated>1754890735004</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="feat: Add drag-and-drop functionality for link management using SortableJS, enhance `.env` handling, and update `.gitignore` to include `.env.app.template`">
+      <option name="closed" value="true" />
+      <created>1754894252310</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1754894252310</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -137,7 +142,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="feat: Integrate admin editing functionality with live preview, add link management, and streamline application setup with Docker and configuration files." />
     <MESSAGE value="chore: Add IntelliJ GitToolBox project settings configuration" />
-    <option name="LAST_COMMIT_MESSAGE" value="chore: Add IntelliJ GitToolBox project settings configuration" />
+    <MESSAGE value="feat: Add drag-and-drop functionality for link management using SortableJS, enhance `.env` handling, and update `.gitignore` to include `.env.app.template`" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat: Add drag-and-drop functionality for link management using SortableJS, enhance `.env` handling, and update `.gitignore` to include `.env.app.template`" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

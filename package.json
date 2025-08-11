@@ -5,7 +5,7 @@
   "description": "Simple express linktree app with typescript and admin login",
   "main": "src/App.ts",
   "scripts": {
-    "build": "tsc",
+    "build": "postcss src/public/css/tailwind.css -o src/public/css/app.css && tsc",
     "start": "node dist/server.js",
     "dev:tailwind": "postcss src/public/css/tailwind.css -o src/public/css/app.css -w",
     "dev:express": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/server.ts",
