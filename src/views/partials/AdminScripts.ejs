@@ -102,6 +102,9 @@
                     if (name) {
                         const newName = name.replace(/links\[\d+\]/, `links[${index}]`);
                         input.setAttribute('name', newName);
+                        if (name.includes('[id]')) {
+                            input.value = index;
+                        }
                     }
                 });
             });
@@ -130,7 +133,7 @@
 
         function addLink()
         {
-            const template = `<%- include('EditLinkItem', { link: {id: `new-temp-id`,name: '',icon: 'x-twitter',link: '' }}) -%>`
+            const template = `<%- include('EditLinkItem', { link: {id: `99`,name: '',icon: 'x-twitter',link: '' }}) -%>`
 
             const linkItem = document.createElement('div');
             linkItem.innerHTML = template;
