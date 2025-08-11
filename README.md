@@ -14,7 +14,7 @@ ___
 
 - Copy .env.template to .env
 - Setup your environment variables in .env
-- Set your app password in .env.template
+- Set your app password in .env
 - Run `docker-compose up` to start the development server
 - Open the IP address of the container set in .env in your browser
 ___

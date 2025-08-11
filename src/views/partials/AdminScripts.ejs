@@ -7,6 +7,7 @@
     }
 </style>
 
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
 <script>
     const form = document.getElementById('edit-form');
     const preview = document.getElementById('preview');
@@ -42,6 +43,7 @@
             const linkElements = linksContainer.querySelectorAll('.link-item');
             linkElements.forEach(linkElement => {
                 const link = {
+                    id: linkElement.dataset.linkId,
                     name: linkElement.querySelector('input[name*="[name]"]').value,
                     icon: linkElement.querySelector('select[name*="[icon]"]').value,
                     link: linkElement.querySelector('input[name*="[link]"]').value
@@ -103,6 +105,7 @@
         const index = linksContainer.children.length;
         const newLink = document.createElement('div');
         newLink.className = 'p-4 border rounded-lg shadow-sm bg-gray-50 link-item';
+        newLink.dataset.linkId = Date.now().toString();
         newLink.innerHTML = `
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div class="md:col-span-1">
@@ -160,6 +163,7 @@
 
             if (nameInput && iconInput && linkInput) {
                 const link = {
+                    id: linkElement.dataset.linkId,
                     name: nameInput.value,
                     icon: iconInput.value,
                     link: linkInput.value
@@ -206,4 +210,14 @@
 
     // Init preview on page load
     updateLivePreview();
+
+    // Init SortableJS
+    const sortable = new Sortable(linksContainer, {
+        handle: '.handle',
+        animation: 150,
+        onEnd: () => {
+            reindexLinks();
+            updateLivePreview();
+        },
+    });
 </script>
