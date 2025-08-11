@@ -4,12 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="53bbe3ae-7c4f-4a09-8951-86fa6038c623" name="Changes" comment="chore: fix Dockerfile case sensitivity in CMD">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+    <list default="true" id="53bbe3ae-7c4f-4a09-8951-86fa6038c623" name="Changes" comment="chore: ensure `default.json` is generated from template if missing, update `docker-compose` command, and adjust `.gitignore`">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docker-compose.yml" beforeDir="false" afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/data/default.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/data/template_default.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -103,7 +100,7 @@
       <workItem from="1754811123662" duration="6254000" />
       <workItem from="1754822831175" duration="4019000" />
       <workItem from="1754828039023" duration="74000" />
-      <workItem from="1754828153214" duration="22318000" />
+      <workItem from="1754828153214" duration="22626000" />
     </task>
     <task id="LOCAL-00001" summary="feat: Integrate admin editing functionality with live preview, add link management, and streamline application setup with Docker and configuration files.">
       <option name="closed" value="true" />
@@ -145,7 +142,15 @@
       <option name="project" value="LOCAL" />
       <updated>1754894892726</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="chore: ensure `default.json` is generated from template if missing, update `docker-compose` command, and adjust `.gitignore`">
+      <option name="closed" value="true" />
+      <created>1754895977664</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1754895977664</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -168,7 +173,8 @@
     <MESSAGE value="feat: Add drag-and-drop functionality for link management using SortableJS, enhance `.env` handling, and update `.gitignore` to include `.env.app.template`" />
     <MESSAGE value="feat: Refactor Dockerfile for multi-stage build, update build script in package.json, and optimize production setup" />
     <MESSAGE value="chore: fix Dockerfile case sensitivity in CMD" />
-    <option name="LAST_COMMIT_MESSAGE" value="chore: fix Dockerfile case sensitivity in CMD" />
+    <MESSAGE value="chore: ensure `default.json` is generated from template if missing, update `docker-compose` command, and adjust `.gitignore`" />
+    <option name="LAST_COMMIT_MESSAGE" value="chore: ensure `default.json` is generated from template if missing, update `docker-compose` command, and adjust `.gitignore`" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

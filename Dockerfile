@@ -13,11 +13,11 @@ COPY . .
 
 RUN npm run build
 
-COPY src/views views/
-COPY src/public public/
-COPY src/data data/
+COPY src/views dist/views/
+COPY src/public dist/public/
 
 #if no data/default.json is present, we create one from the template
+RUN mkdir -p dist/data/
 RUN test ! -f dist/data/default.json && cp src/data/template_default.json dist/data/default.json || true
 
 FROM ${DOCKER_BASE_IMAGE}:${DOCKER_BASE_TAG}
