@@ -11,10 +11,10 @@ COPY package*.json .
 RUN npm install
 COPY . .
 
-RUN npm run build
-
 COPY src/views dist/views/
 COPY src/public dist/public/
+
+RUN npm run build
 
 #if no data/default.json is present, we create one from the template
 RUN mkdir -p dist/data/
